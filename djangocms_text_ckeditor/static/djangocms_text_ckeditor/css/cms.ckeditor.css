@@ -17,7 +17,7 @@
 
 /* ensure dialog has relative positioning for absolute positioned content */
 .cms-ckeditor-dialog .cke_dialog {
-    position: fixed !important;
+    /* position: fixed !important; */
 }
 .cke_dialog_contents {
     user-select: none !important;
@@ -38,7 +38,6 @@
 .cke_panel {
     min-width: 200px !important;
 }
-
 
 /* add / edit plugin modal */
 .cke_dialog_body {
@@ -73,7 +72,11 @@
 
     -webkit-overflow-scrolling: touch !important;
 }
-.cms-ckeditor-dialog .cke_dialog_page_contents table .cke_dialog_ui_vbox_child iframe {
+.cms-ckeditor-dialog
+    .cke_dialog_page_contents
+    table
+    .cke_dialog_ui_vbox_child
+    iframe {
     display: block !important;
     position: static !important;
     width: 100% !important;

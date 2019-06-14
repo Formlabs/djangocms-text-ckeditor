@@ -101,6 +101,14 @@ class DeleteOnCancelForm(forms.Form):
 class TextForm(ModelForm):
     body = forms.CharField()
 
+    def clean(self):
+        cleaned_data = super().clean()
+        body = cleaned_data.get("body")
+
+        if 'https://new-content-staging' in body or 'https://content-staging' in body or 'https://staging' in body:
+            self.add_error(
+                'body', 'One or more links are pointing to a staging domain, please check all links and save again.')
+
     class Meta:
         model = Text
         exclude = (

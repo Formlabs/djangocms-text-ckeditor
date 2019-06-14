@@ -8,7 +8,6 @@
      * @description: Adds cms specific plugins to CKEditor
      */
     CMS.CKEditor = {
-
         options: {
             // ckeditor default settings, will be overwritten by CKEDITOR_SETTINGS
             language: 'en',
@@ -57,9 +56,14 @@
                 this.container.data('ckeditor-initialized', true);
                 // add additional settings to options
                 this.options.toolbar = settings.toolbar;
-                this.options = $.extend(false, {
-                    settings: settings
-                }, this.options, options);
+                this.options = $.extend(
+                    false,
+                    {
+                        settings: settings
+                    },
+                    this.options,
+                    options
+                );
 
                 // add extra plugins that we absolutely must have
                 this.options.extraPlugins = this.options.extraPlugins +=
@@ -74,8 +78,10 @@
                 CKEDITOR.dtd.body['cms-plugin'] = 1;
 
                 // add additional plugins (autoloads plugins.js)
-                CKEDITOR.skin.addIcon('cmsplugins', settings.static_url +
-                    '/ckeditor_plugins/cmsplugins/icons/cmsplugins.png');
+                CKEDITOR.skin.addIcon(
+                    'cmsplugins',
+                    settings.static_url + '/ckeditor_plugins/cmsplugins/icons/cmsplugins.png'
+                );
 
                 // render ckeditor
                 this.editor = CKEDITOR.replace(container, this.options);
@@ -88,34 +94,36 @@
         // setup is called after ckeditor has been initialized
         setup: function () {
             // auto maximize modal if alone in a modal
-            var that = this;
-            var win = window.parent || window;
+            // var that = this;
+            // var win = window.parent || window;
             // 70px is hardcoded to make it more performant. 20px + 20px - paddings, 30px label height
-            var TOOLBAR_HEIGHT_WITH_PADDINGS = 70;
+            // var TOOLBAR_HEIGHT_WITH_PADDINGS = 70;
 
             if (this._isAloneInModal()) {
-                that.editor.resize('100%', win.CMS.$('.cms-modal-frame').height() - TOOLBAR_HEIGHT_WITH_PADDINGS);
-                this.editor.execCommand('maximize');
+                console.log('alone!');
 
-                $(window).on('resize.ckeditor', function () {
-                    that._repositionDialog(CKEDITOR.dialog.getCurrent(), win);
-                }).trigger('resize.ckeditor');
-
-                win.CMS.API.Helpers.addEventListener('modal-maximized modal-restored', function () {
-                    try {
-                        if (!$('.cke_maximized').length) {
-                            that.editor.resize(
-                                '100%',
-                                win.CMS.$('.cms-modal-frame').height() - TOOLBAR_HEIGHT_WITH_PADDINGS
-                            );
-                            setTimeout(function () {
-                                that._repositionDialog(CKEDITOR.dialog.getCurrent(), win);
-                            }, 0);
-                        }
-                    } catch (e) {
-                        // sometimes throws errors if modal with text plugin is closed too fast
-                    }
-                });
+                // that.editor.resize('100%', win.CMS.$('.cms-modal-frame').height() - TOOLBAR_HEIGHT_WITH_PADDINGS);
+                // this.editor.execCommand('maximize');
+                // $(window)
+                //     .on('resize.ckeditor', function() {
+                //         that._repositionDialog(CKEDITOR.dialog.getCurrent(), win);
+                //     })
+                //     .trigger('resize.ckeditor');
+                // win.CMS.API.Helpers.addEventListener('modal-maximized modal-restored', function() {
+                //     try {
+                //         if (!$('.cke_maximized').length) {
+                //             that.editor.resize(
+                //                 '100%',
+                //                 win.CMS.$('.cms-modal-frame').height() - TOOLBAR_HEIGHT_WITH_PADDINGS
+                //             );
+                //             setTimeout(function() {
+                //                 that._repositionDialog(CKEDITOR.dialog.getCurrent(), win);
+                //             }, 0);
+                //         }
+                //     } catch (e) {
+                //         // sometimes throws errors if modal with text plugin is closed too fast
+                //     }
+                // });
             }
 
             // add css tweks to the editor
@@ -125,8 +133,10 @@
 
         styles: function () {
             // add styling to source and fullscreen view
-            $('.cke_button__maximize, .cke_button__source').parent()
-                .css('margin-right', 0).parent()
+            $('.cke_button__maximize, .cke_button__source')
+                .parent()
+                .css('margin-right', 0)
+                .parent()
                 .css('float', 'right');
         },
 
@@ -147,8 +157,10 @@
             var body = this.container.closest('body');
 
             // return true if the ckeditor is alone in a modal popup
-            return body.is('.app-djangocms_text_ckeditor.model-text') || // Django >= 1.7
-                body.is('.djangocms_text_ckeditor-text'); // Django < 1.7
+            return (
+                body.is('.app-djangocms_text_ckeditor.model-text') ||
+                body.is('.djangocms_text_ckeditor-text') // Django >= 1.7
+            ); // Django < 1.7
         },
 
         /**
